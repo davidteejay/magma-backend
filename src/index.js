@@ -4,6 +4,7 @@ import session from 'express-session';
 import cors from 'cors';
 import morgan from 'morgan';
 import Debug from 'debug';
+import dotenv from 'dotenv';
 import errorhandler from 'errorhandler';
 import methodOverride from 'method-override';
 import routes from './routes';
@@ -39,7 +40,6 @@ if (!isProduction) {
   app.use(errorhandler());
   app.use(morgan('dev'));
 }
-
 
 app.use(routes);
 
