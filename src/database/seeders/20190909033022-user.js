@@ -21,7 +21,7 @@ module.exports = {
     firstName: 'Frank',
     lastName: 'Lampard',
     email: 'frank@gmail.com',
-    password: 'Frank1234',
+    password: '$2b$10$bOjFSE6/F7vK1aTptF20muw8Rm2aeS4ypwuMVWhV2WJwMvw.xdivK',
     isVerified: false,
     createdAt: new Date(),
     updatedAt: new Date()
@@ -30,6 +30,15 @@ module.exports = {
     firstName: 'Frank',
     lastName: 'alabi',
     email: 'frank123@gmail.com',
+    password: '$2b$10$bWOgNEUdUwdwUTalAYe0YOXbbDqj2S5I9iRHig0CuJpPpx7z0OkjC',
+    isVerified: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    firstName: 'Frank',
+    lastName: 'alabi',
+    email: 'viola10@gmail.com',
     password: '$2b$10$bWOgNEUdUwdwUTalAYe0YOXbbDqj2S5I9iRHig0CuJpPpx7z0OkjC',
     isVerified: true,
     createdAt: new Date(),

@@ -1,6 +1,11 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+import models from '../database/models';
 import Responses from './Responses';
+
+
+dotenv.config();
 
 /**
  * @class Helper
@@ -45,9 +50,52 @@ export default class Helper {
    * @returns {string} string response
    * @memberof Helper
    */
-  static async hashPassword(password) {
-    const hash = await bcrypt.hash(password, 10);
-    return hash;
+  static hashPassword(password) {
+    return bcrypt.hashSync(password, 10);
+  }
+
+  /**
+    * @method verifyExistingEmail
+    * @description verify if an email already exists
+    * @static
+    * @param {string} email string
+    * @returns {boolean} true or false
+    * @memberof Helper
+    */
+  static async verifyExistingEmail(email) {
+    const check = await models.User.findOne({ where: { email, isVerified: true } });
+    if (check) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+    * @method constructResetEmail
+    * @description construct a password rest email
+    * @static
+    * @param {object} req object,
+    * @param {string} email string,
+    * @returns {object} constructed object
+    * @memberof Helper
+    */
+  static constructResetEmail(req, email) {
+    const recipients = [email];
+    const issued = Date.now();
+    const expiryDate = parseInt(Date.now(), 10) + 3600000;
+    const payload = { email, issued, expiryDate };
+    const token = Helper.generateToken(payload);
+    const link = `http://${req.headers.host}/api/v1/users/reset/${token}`;
+    const text = `
+           <h2>Hi, there</h2>
+           <p>you can reset your password <a href='${link}'>here</a></p>
+    `;
+    return {
+      from: `barefootnomad.com <${process.env.GMAIL_ADDRESS}>`,
+      to: [...recipients],
+      subject: 'Barefoot Nomad Password Reset Link',
+      html: text
+    };
   }
 
   /**

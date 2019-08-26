@@ -1,10 +1,15 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import sinonChai from 'sinon-chai';
+import Helper from '../utils/Helper';
 import app from '../index';
 
+
 chai.use(chaiHttp);
+chai.use(sinonChai);
 
 const { expect } = chai;
+let token;
 
 describe('/POST Signup route', () => {
   it('should return an error if user credentials are invalid', done => {
@@ -45,15 +50,34 @@ describe('/POST Signup route', () => {
       });
   });
 
-  it('should create a new user if details are valid', done => {
+  it('should not create a new user if details are invalid', done => {
     chai
       .request(app)
       .post('/api/v1/users/signup')
       .send({
-        firstName: 'Viola',
-        lastName: 'Violin',
-        email: 'viola10@gmail.com',
-        password: 'Viola100'
+        firstName: 'Vio9la',
+        lastName: 'Vi8olin',
+        email: 'viola10gmail.com',
+        password: 'viola100'
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('status').eql('error');
+        expect(res.body).to.have.property('message');
+        done(err);
+      });
+  });
+
+  it('should  create a new user if details are valid', done => {
+    chai
+      .request(app)
+      .post('/api/v1/users/signup')
+      .send({
+        firstName: 'tunde',
+        lastName: 'awati',
+        email: 'nano@gmail.com',
+        password: 'David20@$',
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
@@ -61,6 +85,26 @@ describe('/POST Signup route', () => {
         expect(res.body.data).to.have.property('token');
         expect(res.body).to.have.property('message')
           .eql('user account created successfully');
+        expect(res.body).to.have.property('message');
+        done(err);
+      });
+  });
+
+  it('should return an error if email already exists', done => {
+    chai
+      .request(app)
+      .post('/api/v1/users/signup')
+      .send({
+        firstName: 'Jibson',
+        lastName: 'Onyekelu',
+        email: 'naimatdavid@mail.com',
+        password: 'Adeyemo100'
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(409);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('status').eql('error');
+        expect(res.body).to.have.property('message').eql('email already in use');
         done(err);
       });
   });
@@ -123,13 +167,15 @@ describe('/POST Signin route', () => {
       .request(app)
       .post('/api/v1/users/signin')
       .send({
-        email: 'viola10@gmail.com',
-        password: 'Viola100'
+        email: 'frank@gmail.com',
+        password: 'Frank1234'
       })
       .end((err, res) => {
         expect(res).status(401);
         expect(res.body).to.be.an('object');
         expect(res.body).to.have.property('status').eql('error');
+        expect(res.body.message).to.be.equal('Your email is not verified.');
+        expect(res.status).to.be.equal(401);
         done(err);
       });
   });
@@ -151,4 +197,88 @@ describe('/POST Signin route', () => {
         done(err);
       });
   });
+});
+describe('POST api/v1/users/reset', () => {
+  it('should send a registered user a reset password link', done => {
+    chai
+      .request(app)
+      .post('/api/v1/users/reset')
+      .send({
+        email: 'frank123@gmail.com'
+      })
+      .end((err, res) => {
+        expect(res).to.haveOwnProperty('status');
+        done();
+      });
+  });
+
+  it('should send an appropriate message if password reset link is  sent ', done => {
+    chai
+      .request(app)
+      .post('/api/v1/users/reset')
+      .send({
+        email: 'frank123@gmail.com'
+      })
+      .end((err, res) => {
+        expect(res.body).to.haveOwnProperty('message');
+        expect(res.status).to.be.equal(200);
+        done();
+      });
+  });
+});
+
+
+describe('POST api/v1/users/reset/:token', () => {
+  before(done => {
+    token = Helper.generateToken({ email: 'naimatdavid@mail.com', issued: Date.now(), expiryDate: Date.now() + 36000 });
+    done();
+  });
+  it('should update a user password', done => {
+    chai
+      .request(app)
+      .patch(`/api/v1/users/reset/${token}`)
+      .send({ password: 'Lorem20@$' })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(200);
+        expect(res.body.status).to.be.equal('success');
+        done();
+      });
+  }).timeout(5000);
+  it('should take the user to a page to reset the password', done => {
+    chai
+      .request(app)
+      .get(`/api/v1/users/reset/${token}`)
+      .end((err, res) => {
+        expect(res.status).to.be.equal(200);
+        done();
+      });
+  });
+  it('should validate the new password', done => {
+    before(() => {
+      token = Helper.generateToken({
+        email: 'naimatdavid@mail.com',
+        issued: Date.now(),
+        expiryDate: 3600000
+      });
+    });
+    chai
+      .request(app)
+      .patch(`/api/v1/users/reset/${token}`)
+      .send({ password: 'morem20' })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(400);
+        done();
+      });
+  }).timeout(5000);
+  it('should not update password via an expired link', done => {
+    chai
+      .request(app)
+      .patch(`/api/v1/users/reset/${Helper.generateToken({ email: 'naimatdavid@mail.com', issued: Date.now(), expiryDate: 3600000 })}`)
+      .send({ password: 'Morem20@$' })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(400);
+        expect(res.body.message).to.be.equal('this address link has expired');
+        done();
+      });
+  }).timeout(5000);
 });
