@@ -15,10 +15,10 @@
   ],
   "schemes": ["https", "http"],
   "paths": {
-    "/user/signup": {
+    "/users/signup": {
       "post": {
         "tags": ["auth"],
-        "summary": "Create a new user",
+        "summary": "Creates a new user",
         "description": "This endpoint registers a new user",
         "operationId": "createUser",
         "consumes": ["application/json"],
@@ -49,6 +49,41 @@
           }
         }
       }
+    },
+    "/users/signin": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Signs in a verified user",
+        "description": "This endpoint signs in a verified user",
+        "operationId": "loginUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Information needed for login",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Signin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login successful.",
+            "schema": {
+              "$ref": "#/definitions/AuthResponse"
+            }
+          },
+          "404": {
+            "description": "Your email cannot be found in our database."
+          },
+          "401": {
+            "description": "Your password is incorrect."
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -61,6 +96,18 @@
         "lastName": {
           "type": "string"
         },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string",
+          "format": "password"
+        }
+      }
+    },
+    "Signin": {
+      "type": "object",
+      "properties": {
         "email": {
           "type": "string"
         },

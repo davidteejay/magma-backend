@@ -64,3 +64,72 @@ describe('/POST Signup route', () => {
       });
   });
 });
+
+describe('/POST Signin route', () => {
+  it('should return an error if login email is not found', done => {
+    chai
+      .request(app)
+      .post('/api/v1/users/signin')
+      .send({
+        email: 'viola102gmail.com',
+        password: 'viola10012'
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('status').eql('error');
+        expect(res.body).to.have.property('message').eql('Your email cannot be found in our database.');
+        done(err);
+      });
+  });
+
+  it('should return an error if password is incorrect', done => {
+    chai
+      .request(app)
+      .post('/api/v1/users/signin')
+      .send({
+        email: 'frank@gmail.com',
+        password: 'Viola10012345',
+      })
+      .end((err, res) => {
+        expect(res).status(401);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('status').eql('error');
+        expect(res.body).to.have.property('message').eql('Your password is incorrect.');
+        done(err);
+      });
+  });
+
+  it('should return an error if email is not verified', done => {
+    chai
+      .request(app)
+      .post('/api/v1/users/signin')
+      .send({
+        email: 'viola10@gmail.com',
+        password: 'Viola100'
+      })
+      .end((err, res) => {
+        expect(res).status(401);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('status').eql('error');
+        done(err);
+      });
+  });
+
+  it('should sign in a registered user if details are valid', done => {
+    chai
+      .request(app)
+      .post('/api/v1/users/signin')
+      .send({
+        email: 'frank123@gmail.com',
+        password: 'Password12345',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('message')
+          .eql('Login successful.');
+        done(err);
+      });
+  });
+});

@@ -55,4 +55,17 @@ export default class Helper {
     const errs = errors.length > 0 ? errors : null;
     return errs;
   }
+
+  /**
+   * @method comparePassword
+   * @description compare password with database hash password
+   * @static
+   * @param {string} password
+   * @param {string} hashPassword
+   * @returns {string} string response
+   * @memberof Helper
+   */
+  static comparePassword(password, hashPassword) {
+    return bcrypt.compareSync(password, hashPassword);
+  }
 }
