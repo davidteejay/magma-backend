@@ -45,9 +45,8 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 app.use('/api/v1', userRoute);
 
 app.get('/', (req, res) => {
-  res.status(200).send({
-    message: 'Welcome to Barefoot Nomad'
-  });
+  Responses.setSuccess(200, 'Welcome to Barefoot Nomad');
+  Responses.send(res);
 });
 
 app.all('/*', (req, res) => {
