@@ -28,9 +28,26 @@ class Auth {
       req.user = decoded;
       return next();
     } catch (err) {
-      Responses.setError(401, 'Authentication failed');
+      const message = await Auth.getTokenErrorMessage(err);
+      Responses.setError(401, message);
       return Responses.send(res);
     }
+  }
+
+  /**
+   * @method getTokenErrorMessage
+   * @description get jwt error message
+   * @static
+   * @param {object} error - Request object
+   * @param {object} next
+   * @returns {object} JSON response
+   * @memberof Auth
+   */
+  static getTokenErrorMessage(error) {
+    const expMessage = 'your session has expired, please login again';
+    const errorMessage = error.message === 'jwt expired'
+      ? expMessage : 'Authentication failed';
+    return errorMessage;
   }
 }
 
