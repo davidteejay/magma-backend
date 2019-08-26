@@ -18,13 +18,13 @@ describe('Handle requests on other endpoints', () => {
       });
   });
 
-  it('should return an error when a wrong url is provided', done => {
+  it('should return a welcome message for version 1 of the API', done => {
     chai
       .request(app)
-      .get('/api/v1/mnn')
+      .get('/api/v1/')
       .end((err, res) => {
-        expect(res).to.have.status(404);
-        expect(res.body.message).to.be.equal('The requested url was not found on this server');
+        expect(res).to.have.status(200);
+        expect(res.body.message).to.be.equal('Welcome to Barefoot Nomad API');
         done(err);
       });
   });

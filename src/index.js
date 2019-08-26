@@ -41,11 +41,6 @@ app.get('/', (req, res) => {
   Responses.send(res);
 });
 
-app.all('/*', (req, res) => {
-  Responses.setError(404, 'The requested url was not found on this server');
-  Responses.send(res);
-});
-
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
   const err = new Error('Not Found');

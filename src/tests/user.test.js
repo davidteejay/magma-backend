@@ -3,11 +3,14 @@ import chaiHttp from 'chai-http';
 import sinonChai from 'sinon-chai';
 import Helper from '../utils/Helper';
 import app from '../index';
+import email from '../utils/email';
+
 
 
 chai.use(chaiHttp);
 chai.use(sinonChai);
 
+const { sendEmail } = email;
 const { expect } = chai;
 let token;
 
@@ -80,6 +83,26 @@ describe('/POST Signup route', () => {
         password: 'David20@$',
       })
       .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('status').eql('error');
+        expect(res.body).to.have.property('message');
+        done(err);
+      });
+  });
+
+  it('should  create a new user if details are valid', done => {
+    chai
+      .request(app)
+      .post('/api/v1/users/signup')
+      .send({
+        firstName: 'tunde',
+        lastName: 'awati',
+        email: 'nano@gmail.com',
+        password: 'David20@$',
+      })
+      .end((err, res) => {
+        console.log(res.body);
         expect(res).to.have.status(201);
         expect(res.body).to.be.an('object');
         expect(res.body.data).to.have.property('token');
