@@ -7,7 +7,10 @@ import Debug from 'debug';
 import dotenv from 'dotenv';
 import errorhandler from 'errorhandler';
 import methodOverride from 'method-override';
+import swaggerUI from 'swagger-ui-express';
+
 import routes from './routes';
+import swaggerDoc from './config/swagger.json';
 
 // eslint-disable-next-line no-undef
 dotenv.config();
@@ -16,7 +19,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 // Create global app object
 const app = express();
-const debug = Debug('app');
+const debug = Debug('app:server');
 
 app.use(cors());
 
@@ -41,6 +44,7 @@ if (!isProduction) {
   app.use(morgan('dev'));
 }
 
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 app.use(routes);
 
 // catch 404 and forward to error handler
