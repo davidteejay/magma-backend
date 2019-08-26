@@ -23,5 +23,9 @@ export default {
     lastName,
     email,
     password
+  }),
+  signin: Joi.object().keys({
+    email: Joi.string().required().label('Email is required'),
+    password: Joi.string().required().label('password is required')
   })
 };
