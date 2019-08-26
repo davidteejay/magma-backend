@@ -9,4 +9,9 @@ userRoute.post('/users/signup',
   userValidations.emailExists,
   UserController.signup);
 
+userRoute.post('/users/signin',
+  userValidations.validateUser('signin'),
+  userValidations.validateLogin,
+  UserController.signin);
+
 export default userRoute;
