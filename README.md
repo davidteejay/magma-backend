@@ -8,3 +8,19 @@ Barefoot Nomad - Making company travel and accomodation easy and convinient.
 Make company global travel and accommodation easy and convenient for the strong workforce of savvy members of staff, by leveraging the modern web
 
 ---
+
+## Technologies
+
+- Sequelize
+
+## How to setup sequelize
+
+To setup Sequelize:
+
+```sh
+git clone <https://github.com/andela/magma-backend.git>
+cd magma-backend
+npm install
+npm run db:migrate
+```
+
