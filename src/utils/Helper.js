@@ -1,5 +1,8 @@
 import bcrypt from 'bcrypt';
+<<<<<<< HEAD
 import Responses from './Responses';
+=======
+>>>>>>> feat(signup-api): implement user signup endpoint
 
 /**
  * @class Helper
@@ -15,6 +18,7 @@ export default class Helper {
    * @returns {string} string response
    * @memberof Helper
    */
+<<<<<<< HEAD
   static async hashPassword(password) {
     const hash = await bcrypt.hash(password, 10);
     return hash;
@@ -67,5 +71,9 @@ export default class Helper {
    */
   static comparePassword(password, hashPassword) {
     return bcrypt.compareSync(password, hashPassword);
+=======
+  static hashPassword(password) {
+    return bcrypt.hashSync(password, 10);
+>>>>>>> feat(signup-api): implement user signup endpoint
   }
 }

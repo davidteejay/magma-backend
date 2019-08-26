@@ -16,6 +16,7 @@ export default class UserController {
    * @returns {object} JSON response
    * @memberof UserController
    */
+<<<<<<< HEAD
   static signup(req, res) {
     let { firstName, lastName, email } = req.body;
     const { password } = req.body;
@@ -58,5 +59,26 @@ export default class UserController {
       Responses.setError(500, 'database error');
       return Responses.send(res);
     });
+=======
+  static async signup(req, res) {
+    const {
+      firstname, lastname, email, password
+    } = req.body;
+    const user = {
+      firstname, lastname, email, password
+    };
+    try {
+      const newUser = await UserService.signup(user);
+      const result = {
+        id: newUser.id,
+        email: newUser.email
+      };
+      Responses.setSuccess(201, { result }, 'user account created successfully');
+      return Responses.send(res);
+    } catch (error) {
+      Responses.setError(500, 'database error');
+      Responses.send(res);
+    }
+>>>>>>> feat(signup-api): implement user signup endpoint
   }
 }

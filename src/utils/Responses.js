@@ -19,12 +19,21 @@ export default class Responses {
    * @description Set success responses
    * @static
    * @param {object} statusCode
+<<<<<<< HEAD
    * @param {object} message
    * @param {object} data
    * @returns {undefined}
    * @memberof Responses
    */
   static setSuccess(statusCode, message, data = undefined) {
+=======
+   * @param {object} data
+   * @param {object} message
+   * @returns {undefined}
+   * @memberof Responses
+   */
+  static setSuccess(statusCode, data, message) {
+>>>>>>> feat(signup-api): implement user signup endpoint
     this.statusCode = statusCode;
     this.data = data;
     this.message = message;
@@ -55,10 +64,26 @@ export default class Responses {
    * @memberof Responses
    */
   static send(res) {
+<<<<<<< HEAD
     const result = { status: this.type, data: this.data, message: this.message };
     const output = res.status(this.statusCode);
     const response = this.type === 'success' ? output.json(result)
       : output.json({ status: this.type, message: this.message, });
     return response;
+=======
+    const result = {
+      status: this.type,
+      data: this.data,
+      message: this.message
+    };
+
+    if (this.type === 'success') {
+      return res.status(this.statusCode).json(result);
+    }
+    return res.status(this.statusCode).json({
+      status: this.type,
+      message: this.message,
+    });
+>>>>>>> feat(signup-api): implement user signup endpoint
   }
 }

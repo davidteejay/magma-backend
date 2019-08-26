@@ -1,7 +1,6 @@
 import models from '../database/models';
 import Helper from '../utils/Helper';
 
-
 const { User } = models;
 
 /**
@@ -24,26 +23,7 @@ export default class UserService {
     return Users.create(userCredentials);
   }
 
-  /**
-   * @method signin
-   * @description Signs in user with valid credentials
-   * @static
-   * @param {object} loginCredentials - data object
-   * @returns {object} JSON response
-   * @memberof UserService
-   */
-  static async signin(loginCredentials) {
-    const { email } = loginCredentials;
-    const foundUser = await Users.findOne({ where: { email } });
-    const user = {
-      id: foundUser.id,
-      email: foundUser.email,
-      firstName: foundUser.firstName,
-      lastName: foundUser.lastName
-    };
-    return user;
-  }
-
+  
   /**
    * @method signin
    * @description Signs in user with valid credentials
