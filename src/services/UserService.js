@@ -19,9 +19,17 @@ export default class UserService {
    * @memberof UserService
    */
   static async signup(userCredentials) {
-    const { password } = userCredentials;
-    userCredentials.password = await Helper.hashPassword(password);
-    return User.create(userCredentials);
+    let {
+      firstName, lastName, email, password
+    } = userCredentials;
+    firstName = firstName.trim();
+    lastName = lastName.trim();
+    email = email.trim().toLowerCase();
+    password = await Helper.hashPassword(password);
+    const user = {
+      firstName, lastName, email, password
+    };
+    return User.create(user);
   }
 
   /**
