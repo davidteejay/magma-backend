@@ -7,13 +7,93 @@
   },
   "host": "localhost:5000",
   "basePath": "/api/v1",
-  "schemes": [
-    "http"
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Create account and login"
+    }
   ],
+  "schemes": ["https", "http"],
   "paths": {
-    
+    "/user/signup": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Create a new user",
+        "description": "This endpoint registers a new user",
+        "operationId": "createUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Information needed to create a user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Signup"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "user account created successfully",
+            "schema": {
+              "$ref": "#/definitions/AuthResponse"
+            }
+          }
+        }
+      }
+    }
   },
   "definitions": {
-
+    "Signup": {
+      "type": "object",
+      "properties": {
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string",
+          "format": "password"
+        }
+      }
+    },
+    "AuthResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object",
+          "items": {
+            "properties": {
+              "token": {
+                "type": "string"
+              },
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "firstname": {
+                "type": "string"
+              },
+              "lastname": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

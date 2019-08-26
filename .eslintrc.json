@@ -6,6 +6,7 @@
     "es6": true,
     "mocha": true
     },
+    "parser": "babel-eslint",
     "parserOptions": {
     "no-undefined": 0,  
     "ecmaVersion": 6,
@@ -22,6 +23,7 @@
     "no-param-reassign": 0,
     "comma-dangle": 0,
     "curly": ["error", "multi-line"],
+    "arrow-parens": ["error", "as-needed"],
     "import/no-unresolved": [2, { "commonjs": true }],
     "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
     "no-shadow": ["error", { "allow": ["req", "res", "err"] }],
