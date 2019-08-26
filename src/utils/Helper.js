@@ -1,12 +1,11 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import Responses from './Responses';
-
 /**
- * @class Helper
- * @description An helper class containing utility methods
- * @exports Helper
- */
+* @class Helper
+* @description An helper class containing utility methods
+* @exports Helper
+*/
 export default class Helper {
   /**
    * @method generateToken
