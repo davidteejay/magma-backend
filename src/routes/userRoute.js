@@ -20,4 +20,13 @@ userRoute.post(
   UserController.signin
 );
 
+userRoute
+  .post('/users/reset', UserController.resetPassword)
+  .get('/users/reset/:token', UserController.updatePassword)
+  .patch(
+    '/users/reset/:token',
+    validate('updatePassword'),
+    UserController.updatePassword
+  );
+
 export default userRoute;
