@@ -1,6 +1,6 @@
 module.exports = {
   up: queryInterface => queryInterface.bulkInsert('Requests', [{
-    userId: 1,
+    userId: 2,
     origin: 'New York',
     destination: 'Tokyo',
     type: 'one-way',
