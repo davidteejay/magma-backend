@@ -1,0 +1,23 @@
+{
+  "name": "magma-backend",
+  "description": "barefoot nomad makes company global travel and acommodation easy and convenient",
+  "repository": "https://github.com/andela/magma-backend",
+  "scripts": {},
+  "env": {
+    "NODE_ENV": {
+      "value": "production"
+    },
+    "DATABASE_URL": {
+      "value": "postgres://eyvhrackklutgf:0e80536e6932b646f46b84433d9fc1e85aaf527e775e59a2a1a8b6ff9e3deb9f@ec2-23-23-228-132.compute-1.amazonaws.com:5432/dbtblvpr8n9kvs"
+    }
+  },
+  "formation": {},
+  "image": "heroku/nodejs",
+  "addons": ["heroku-postgresql"],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "stack": "container"
+}
