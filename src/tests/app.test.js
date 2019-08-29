@@ -1,5 +1,6 @@
 import request from 'request';
 import assert from 'assert';
+import '../index';
 
 const baseUrl = 'http://localhost:3000/';
 
