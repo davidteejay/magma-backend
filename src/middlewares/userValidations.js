@@ -11,13 +11,21 @@ import Helper from '../utils/Helper';
  * @param {object} path - The signup schema
  * @returns {object} JSON response
  */
-const validateUser = path => (req, res, next) => {
+const validateSignup = path => (req, res, next) => {
   const user = req.body;
   if (_.has(Schemas, path)) {
     const schema = _.get(Schemas, path);
     const response = Joi.validate(user, schema, { abortEarly: false });
-    const errors = Helper.buildErrorResponse(response);
-    if (errors) return Responses.send(res);
+    if (!response.error) {
+      req.body = user;
+    } else {
+      const errors = [];
+      response.error.details.forEach(error => {
+        errors.push(error.context.label);
+      });
+      Responses.setError(400, errors);
+      return Responses.send(res);
+    }
   }
   next();
 };

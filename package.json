@@ -7,11 +7,7 @@
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "build": "babel -d ./build ./src -s",
     "start": "node ./build/index.js",
-<<<<<<< HEAD
     "pretest": "cross-env NODE_ENV=test npm run undo:migrate && cross-env NODE_ENV=test npm run db:migrate && npm run seed",
-=======
-    "pretest": "cross-env NODE_ENV=test npm run undo:migrate && cross-env NODE_ENV=test npm run db:migrate",
->>>>>>> feat(signup-api): implement user signup endpoint
     "test": "cross-env NODE_ENV=test nyc mocha --require @babel/register ./src/tests --exit",
     "dev": "cross-env NODE_ENV=development nodemon ./src/index --exec babel-node",
     "lint": "npx eslint ./src --fix",
@@ -24,10 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime-corejs3": "^7.5.5",
-<<<<<<< HEAD
     "@hapi/joi": "^15.1.1",
-=======
->>>>>>> feat(signup-api): implement user signup endpoint
     "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
     "core-js": "^3.2.1",

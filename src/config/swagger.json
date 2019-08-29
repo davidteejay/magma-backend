@@ -41,14 +41,20 @@
               "$ref": "#/definitions/AuthResponse"
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> feat(signup-api): validate user signup credentials
           },
           "409": {
             "description": "email already in use"
           },
           "400": {
             "description": "email is required, and should follow this format: myemail@domain.com"
+<<<<<<< HEAD
 =======
 >>>>>>> feat(signup-api): implement user signup endpoint
+=======
+>>>>>>> feat(signup-api): validate user signup credentials
           }
         }
       }

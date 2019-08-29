@@ -1,17 +1,8 @@
 {
-<<<<<<< HEAD
   "presets": ["@babel/preset-env"],
   "plugins": [
     ["@babel/transform-runtime", {
         "corejs": 3
     }]
   ]
-=======
-    "presets": ["@babel/preset-env"],
-    "plugins": [
-        ["@babel/transform-runtime", {
-          "corejs": 3,
-        }]
-      ]
->>>>>>> feat(signup-api): implement user signup endpoint
 }
