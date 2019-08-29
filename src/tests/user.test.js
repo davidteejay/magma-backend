@@ -5,7 +5,46 @@ import app from '../index';
 chai.use(chaiHttp);
 
 const { expect } = chai;
+
 describe('/POST Signup route', () => {
+  it('should return an error if user credentials are invalid', done => {
+    chai
+      .request(app)
+      .post('/api/v1/user/signup')
+      .send({
+        firstname: 'Vio9la',
+        lastname: 'Vi8olin',
+        email: 'viola10gmail.com',
+        password: 'viola100'
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('status').eql('error');
+        expect(res.body).to.have.property('message');
+        done(err);
+      });
+  });
+
+  it('should return an error if email already exists', done => {
+    chai
+      .request(app)
+      .post('/api/v1/user/signup')
+      .send({
+        firstname: 'Jibson',
+        lastname: 'Onyekelu',
+        email: 'naimatdavid@mail.com',
+        password: 'Adeyemo100'
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(409);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('status').eql('error');
+        expect(res.body).to.have.property('message').eql('email already in use');
+        done(err);
+      });
+  });
+
   it('should create a new user if details are valid', done => {
     chai
       .request(app)

@@ -40,6 +40,12 @@
             "schema": {
               "$ref": "#/definitions/AuthResponse"
             }
+          },
+          "409": {
+            "description": "email already in use"
+          },
+          "400": {
+            "description": "email is required, and should follow this format: myemail@domain.com"
           }
         }
       }
