@@ -1,6 +1,5 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import session from 'express-session';
 import cors from 'cors';
 import morgan from 'morgan';
 import Debug from 'debug';
@@ -29,15 +28,6 @@ app.use(bodyParser.json());
 
 app.use(methodOverride());
 app.use(express.static(`${__dirname}/public`));
-
-app.use(
-  session({
-    secret: 'authorshaven',
-    cookie: { maxAge: 60000 },
-    resave: false,
-    saveUninitialized: false
-  })
-);
 
 if (!isProduction) {
   app.use(errorhandler());

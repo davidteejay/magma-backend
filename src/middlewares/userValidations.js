@@ -11,7 +11,7 @@ import Helper from '../utils/Helper';
  * @param {object} path - The signup schema
  * @returns {object} JSON response
  */
-const validateSignup = path => (req, res, next) => {
+const validateUser = path => (req, res, next) => {
   const user = req.body;
   if (_.has(Schemas, path)) {
     const schema = _.get(Schemas, path);

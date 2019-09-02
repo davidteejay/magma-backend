@@ -1,8 +1,6 @@
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-<<<<<<< HEAD
 import Responses from './Responses';
-=======
->>>>>>> feat(signup-api): implement user signup endpoint
 
 /**
  * @class Helper
@@ -11,6 +9,22 @@ import Responses from './Responses';
  */
 export default class Helper {
   /**
+   * @method generateToken
+   * @description Generates token for securing endpoints
+   * @static
+   * @param {object} payload - data object
+   * @returns {object} JSON response
+   * @memberof Helper
+   */
+  static generateToken(payload) {
+    const secret = process.env.SECRET;
+    const token = jwt.sign(payload, secret, {
+      expiresIn: '1hr',
+    });
+    return token;
+  }
+
+  /**
    * @method hashPassword
    * @description Hash password before saving in the database
    * @static
@@ -18,7 +32,7 @@ export default class Helper {
    * @returns {string} string response
    * @memberof Helper
    */
-<<<<<<< HEAD
+
   static async hashPassword(password) {
     const hash = await bcrypt.hash(password, 10);
     return hash;
@@ -71,9 +85,6 @@ export default class Helper {
    */
   static comparePassword(password, hashPassword) {
     return bcrypt.compareSync(password, hashPassword);
-=======
-  static hashPassword(password) {
-    return bcrypt.hashSync(password, 10);
->>>>>>> feat(signup-api): implement user signup endpoint
   }
+
 }
