@@ -6,12 +6,24 @@ module.exports = {
       type: Sequelize.INTEGER,
       allowNull: false
     },
-    firstname: { type: Sequelize.STRING, allowNull: false },
-    lastname: { type: Sequelize.STRING, allowNull: false },
+    firstName: { type: Sequelize.STRING, allowNull: false },
+    lastName: { type: Sequelize.STRING, allowNull: false },
     email: { type: Sequelize.STRING, allowNull: false, unique: true },
     password: { type: Sequelize.STRING, allowNull: false },
+    gender: { 
+      type: Sequelize.ENUM('Male', 'Female', 'Other'), 
+      allowNull: true 
+    },
+    birthDate: { type: Sequelize.DATEONLY, allowNull: true },
+    prefferedLanguage: { type: Sequelize.STRING, allowNull: true },
+    prefferedCurrency: { type: Sequelize.STRING, allowNull: true },
+    address: { type: Sequelize.TEXT, allowNull: true },
+    phoneNumber: { type: Sequelize.STRING, allowNull: true },
+    role: { type: Sequelize.STRING, allowNull: true },
+    department: { type: Sequelize.STRING, allowNull: true },
+    lineManager: { type: Sequelize.STRING, allowNull: true },
     createdAt: { type: Sequelize.DATE, allowNull: false },
-    updatedAt: { type: Sequelize.DATE, allowNull: false }
+    updatedAt: { type: Sequelize.DATE, allowNull: false },
   }),
-  down: queryInterface => queryInterface.dropTable('Users')
+  down: (queryInterface) => queryInterface.dropTable('Users')
 };

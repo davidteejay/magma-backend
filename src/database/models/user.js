@@ -1,10 +1,10 @@
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    firstname: {
+    firstName: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    lastname: {
+    lastName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -17,6 +17,48 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-  }, {});
+    gender: {
+      type: DataTypes.ENUM('Male', 'Female', 'Other'),
+      allowNull: true
+    },
+    birthDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
+    },
+    prefferedLanguage: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    prefferedCurrency: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    address: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    department: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    lineManager: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    phoneNumber: {
+      type: DataTypes.STRING,
+      allowNull: true
+    }
+  }, 
+);
+User.associate = (models) => {
+  User.belongsTo(models.Role, {
+    foreignKey: 'roleId'
+  });
+};
   return User;
 };

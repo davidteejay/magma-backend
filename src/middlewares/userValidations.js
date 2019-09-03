@@ -10,13 +10,33 @@ import models from '../database/models';
  * @param {object} path - The signup schema
  * @returns {object} JSON response
  */
-const validateSignup = path => (req, res, next) => {
+const validateUser = path => (req, res, next) => {
   const user = req.body;
   if (_.has(Schemas, path)) {
-    const schema = _.get(Schemas, path);
+    const schema = _.get(Schemas, path, 0);
     const response = Joi.validate(user, schema, { abortEarly: false });
     if (!response.error) {
       req.body = user;
+    } else {
+      const errors = [];
+      response.error.details.forEach(error => {
+        errors.push(error.context.label);
+      });
+      Responses.setError(400, errors);
+      return Responses.send(res);
+    }
+  }
+  next();
+};
+
+const validateEmail = path => (req, res, next) => {
+  console.log(req.params)
+  const email = req.params;
+  if (_.has(Schemas, path)) {
+    const schema = _.get(Schemas, path, 0);
+    const response = Joi.validate(email, schema, { abortEarly: false });
+    if (!response.error) {
+      req.params = email;
     } else {
       const errors = [];
       response.error.details.forEach(error => {
@@ -48,5 +68,5 @@ const emailExists = async (req, res, next) => {
 };
 
 export default {
-  validateSignup, emailExists
+  validateUser, validateEmail, emailExists
 };

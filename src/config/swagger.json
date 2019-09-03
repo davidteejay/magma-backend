@@ -11,9 +11,20 @@
     {
       "name": "auth",
       "description": "Create account and login"
+    },
+    {
+      "name": "user profile",
+      "description": "update and retrieve user profile"
     }
   ],
   "schemes": ["https", "http"],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
   "paths": {
     "/user/signup": {
       "post": {
@@ -23,6 +34,7 @@
         "operationId": "createUser",
         "consumes": ["application/json"],
         "produces": ["application/json"],
+        "security": [],
         "parameters": [
           {
             "in": "body",
@@ -49,30 +61,137 @@
           }
         }
       }
+    },
+    "/user/profile/{email}": {
+      "patch": {
+        "tags": ["user profile"],
+        "summary": "Update user profile",
+        "description": "This endpoint updates a user profile",
+        "operationId": "updateProfile",
+        "produces": ["application/json"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "description": "user email",
+            "schema": {
+              "type": "string",
+              "format": "email"
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Information needed to update a user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserProfile"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "user account updated successfully",
+            "schema": {
+              "$ref": "#/definitions/UserProfileResponse"
+            }
+          },
+          "400": {
+            "description": "email is required, and should follow this format: myemail@domain.com"
+          },
+          "500": {
+            "description": "database error"
+          }
+        }
+      },
+      "get": {
+        "tags": ["user profile"],
+        "summary": "Retrieve user profile",
+        "description": "This endpoint retrieve a user profile",
+        "operationId": "retrieveProfile",
+        "produces": ["application/json"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "description": "user email",
+            "schema": {
+              "type": "string",
+              "format": "email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user account retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/UserProfileResponse"
+            }
+          },
+          "400": {
+            "description": "email is required, and should follow this format: myemail@domain.com"
+          },
+          "500": {
+            "description": "database error"
+          }
+        }
+      }
     }
   },
   "definitions": {
-    "Signup": {
+    "UserProfile": {
       "type": "object",
       "properties": {
-        "firstname": {
+        "firstName": {
           "type": "string"
         },
-        "lastname": {
+        "lastName": {
           "type": "string"
         },
-        "email": {
+        "phoneNumber": {
           "type": "string"
         },
-        "password": {
-          "type": "string",
-          "format": "password"
+        "gender": {
+          "type": "string"
+        },
+        "prefferedLanguage": {
+          "type": "string"
+        },
+        "prefferedCurrency": {
+          "type": "string"
+        },
+        "birthDate": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "department": {
+          "type": "string"
+        },
+        "lineManager": {
+          "type": "string"
         }
       }
     },
-    "AuthResponse": {
+    "UserProfileResponse": {
       "type": "object",
       "properties": {
+        "message": {
+          "type": "string"
+        },
         "status": {
           "type": "string"
         },
@@ -80,20 +199,47 @@
           "type": "object",
           "items": {
             "properties": {
-              "token": {
-                "type": "string"
-              },
               "id": {
                 "type": "integer",
                 "format": "int64"
               },
-              "firstname": {
+              "firstName": {
                 "type": "string"
               },
-              "lastname": {
+              "lastName": {
                 "type": "string"
               },
-              "email": {
+              "phoneNumber": {
+                "type": "number"
+              },
+              "gender": {
+                "type": "string"
+              },
+              "prefferedLanguage": {
+                "type": "string"
+              },
+              "prefferedCurrency": {
+                "type": "string"
+              },
+              "birthDate": {
+                "type": "date"
+              },
+              "address": {
+                "type": "string"
+              },
+              "department": {
+                "type": "string"
+              },
+              "lineManager": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updateAt": {
                 "type": "string"
               }
             }
