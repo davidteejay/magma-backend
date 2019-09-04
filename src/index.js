@@ -4,16 +4,12 @@ import session from 'express-session';
 import cors from 'cors';
 import morgan from 'morgan';
 import Debug from 'debug';
-import dotenv from 'dotenv';
 import errorhandler from 'errorhandler';
 import methodOverride from 'method-override';
 import swaggerUI from 'swagger-ui-express';
-
-import routes from './routes';
 import swaggerDoc from './config/swagger.json';
-
-// eslint-disable-next-line no-undef
-dotenv.config();
+import userRoute from './routes/userRoute';
+import Responses from './utils/Responses';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -45,7 +41,19 @@ if (!isProduction) {
 }
 
 app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
-app.use(routes);
+
+app.use('/api/v1', userRoute);
+
+app.get('/', (req, res) => {
+  res.status(200).send({
+    message: 'Welcome to Barefoot Nomad'
+  });
+});
+
+app.all('/*', (req, res) => {
+  Responses.setError(404, 'The requested url was not found on this server');
+  Responses.send(res);
+});
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
