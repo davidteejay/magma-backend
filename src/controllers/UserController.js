@@ -21,7 +21,7 @@ export default class UserController {
     const { password } = req.body;
     firstName = firstName.trim();
     lastName = lastName.trim();
-    email = email.trim();
+    email = email.trim().toLowerCase();
     const user = {
       firstName, lastName, email, password
     };
