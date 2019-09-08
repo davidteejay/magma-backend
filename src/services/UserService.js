@@ -1,7 +1,7 @@
 import models from '../database/models';
 import Helper from '../utils/Helper';
 
-const { User } = models;
+const { User, Role } = models;
 
 /**
  * @class
@@ -42,5 +42,66 @@ export default class UserService {
       lastName: foundUser.lastName
     };
     return user;
+  }
+
+  /**
+   * @method retrieveUser
+   * @description Medium between the database and UserController
+   * @static
+   * @param {object} userCredentials - data object
+   * @returns {object} JSON response
+   * @memberof UserService
+   */
+  static async retrieveUser(id,email) {
+    let user = await User.findOne({returning: true, where: {id, email}});
+    return user;
+  }
+
+  /**
+   * @method updateUser
+   * @description Medium between the database and UserController
+   * @static
+   * @param {object} userCredentials - data object
+   * @returns {object} JSON response
+   * @memberof UserService
+   */
+  static async updateUser(userCredentials,id,email) {
+    const data = userCredentials;
+    let user = await User.update( data, {returning: true, where: {id, email}});
+    return user[1];
+  }
+
+  /**
+   * @method assignRole
+   * @description Medium between the database and UserController
+   * @static
+   * @param {object} userCredentials - data object
+   * @returns {object} JSON response
+   * @memberof UserService
+   */
+  static async assignUser(body) {
+    const { email, roleId } = body;
+    const checkRole = await Role.findOne({ where: { id: Number(roleId) } });
+    const getUser = await User.findOne({
+      where: {
+        email
+      },
+      include: [{
+        model: Role,
+        attributes: ['type']
+      }]
+    });
+
+    if (!getUser) throw new Error('User not found');
+
+    if (!checkRole) throw new Error('Role does not exist');
+
+    if (getUser.dataValues.Role.dataValues.type === 'guest') throw new Error('User email is not verified');
+
+    if (getUser.dataValues.roleId === Number(roleId)) throw new Error('User is already assigned this role');
+
+    await User.update({ roleId: Number(roleId) }, { where: { email } });
+
+    return 'User Role Assigned Successfully';
   }
 }

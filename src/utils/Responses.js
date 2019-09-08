@@ -20,11 +20,16 @@ export default class Responses {
    * @static
    * @param {object} statusCode
 <<<<<<< HEAD
+<<<<<<< HEAD
    * @param {object} message
+=======
+>>>>>>> second commit
    * @param {object} data
+   * @param {object} message
    * @returns {undefined}
    * @memberof Responses
    */
+<<<<<<< HEAD
   static setSuccess(statusCode, message, data = undefined) {
 =======
    * @param {object} data
@@ -34,6 +39,9 @@ export default class Responses {
    */
   static setSuccess(statusCode, data, message) {
 >>>>>>> feat(signup-api): implement user signup endpoint
+=======
+  static setSuccess(statusCode, data, message) {
+>>>>>>> second commit
     this.statusCode = statusCode;
     this.data = data;
     this.message = message;

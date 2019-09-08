@@ -1,9 +1,10 @@
 import Joi from '@hapi/joi';
 import _ from 'lodash';
 import Schemas from '../utils/userSchema';
-import Responses from '../utils/Responses';
 import models from '../database/models';
 import Helper from '../utils/Helper';
+import roleSchema from '../utils/roleSchema';
+import Responses from '../utils/Responses';
 
 /**
  * @function
@@ -14,10 +15,30 @@ import Helper from '../utils/Helper';
 const validateUser = path => (req, res, next) => {
   const user = req.body;
   if (_.has(Schemas, path)) {
-    const schema = _.get(Schemas, path);
+    const schema = _.get(Schemas, path, 0);
     const response = Joi.validate(user, schema, { abortEarly: false });
     if (!response.error) {
       req.body = user;
+    } else {
+      const errors = [];
+      response.error.details.forEach(error => {
+        errors.push(error.context.label);
+      });
+      Responses.setError(400, errors);
+      return Responses.send(res);
+    }
+  }
+  next();
+};
+
+const validateEmail = path => (req, res, next) => {
+  console.log(req.params)
+  const email = req.params;
+  if (_.has(Schemas, path)) {
+    const schema = _.get(Schemas, path, 0);
+    const response = Joi.validate(email, schema, { abortEarly: false });
+    if (!response.error) {
+      req.params = email;
     } else {
       const errors = [];
       response.error.details.forEach(error => {
@@ -38,19 +59,34 @@ const validateUser = path => (req, res, next) => {
  * @param {object} next
  * @returns {object} JSON response
  */
-const emailExists = (req, res, next) => {
-  let { email } = req.body;
-  email = email.trim().toLowerCase();
-  models.Users.findOne({ where: { email } }).then(data => {
-    if (data) {
-      Responses.setError(409, 'email already in use');
+const emailExists = async (req, res, next) => {
+  const { email } = req.body;
+  const check = await models.User.findOne({ where: { email } });
+  if (check) {
+    Responses.setError(409, 'email already in use');
+    return Responses.send(res);
+  }
+  next();
+};
+
+const validateRole = path => (req, res, next) => {
+  console.log(req.params)
+  const assignRole = req.body;
+  if (_.has(roleSchema, path)) {
+    const schema = _.get(roleSchema, path, 0);
+    const response = Joi.validate(assignRole, schema, { abortEarly: false });
+    if (!response.error) {
+      req.body = assignRole;
+    } else {
+      const errors = [];
+      response.error.details.forEach(error => {
+        errors.push(error.context.label);
+      });
+      Responses.setError(400, errors);
       return Responses.send(res);
     }
-    next();
-  }).catch(() => {
-    Responses.setError(500, 'database error');
-    return Responses.send(res);
-  });
+  }
+  next();
 };
 
 /**
@@ -84,5 +120,5 @@ const validateLogin = (req, res, next) => {
 };
 
 export default {
-  validateUser, emailExists, validateLogin
+  validateUser, validateEmail, emailExists, validateRole
 };

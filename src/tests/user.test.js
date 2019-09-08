@@ -10,7 +10,7 @@ describe('/POST Signup route', () => {
   it('should return an error if user credentials are invalid', done => {
     chai
       .request(app)
-      .post('/api/v1/users/signup')
+      .post('/api/v1/user/signup')
       .send({
         firstName: 'Vio9la',
         lastName: 'Vi8olin',
@@ -181,7 +181,7 @@ describe('/POST Signup route', () => {
   it('should create a new user if details are valid', done => {
     chai
       .request(app)
-      .post('/api/v1/users/signup')
+      .post('/api/v1/user/signup')
       .send({
         firstName: 'Viola',
         lastName: 'Violin',

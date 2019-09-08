@@ -1,12 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-<<<<<<< HEAD
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    isVerified: DataTypes.BOOLEAN
-=======
     firstname: {
       type: DataTypes.STRING,
       allowNull: false
@@ -24,7 +17,51 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
->>>>>>> feat(signup-api): implement user signup endpoint
-  }, {});
+    gender: {
+      type: DataTypes.ENUM('Male', 'Female', 'Other'),
+      allowNull: true
+    },
+    birthDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
+    },
+    prefferedLanguage: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    prefferedCurrency: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    address: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    department: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    lineManager: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    phoneNumber: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    roleId: {
+      type: DataTypes.INTEGER,
+    }
+  }, 
+);
+User.associate = (models) => {
+  User.belongsTo(models.Role, {
+    foreignKey: 'roleId'
+  });
+};
   return User;
 };

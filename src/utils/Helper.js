@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
 import Responses from './Responses';
+import bcrypt from 'bcryptjs';
+
+const secret = process.env.SECRET;
 
 /**
  * @class Helper
@@ -17,9 +19,8 @@ export default class Helper {
    * @memberof Helper
    */
   static generateToken(payload) {
-    const secret = process.env.SECRET;
     const token = jwt.sign(payload, secret, {
-      expiresIn: '1hr',
+      expiresIn: '24hr',
     });
     return token;
   }
@@ -87,4 +88,16 @@ export default class Helper {
     return bcrypt.compareSync(password, hashPassword);
   }
 
+  /**
+   * @method verifyToken
+   * @description decode token to confirm authentication before a user can manipulate data
+   * @static
+   * @header {string} token
+   * @returns {json} json response
+   * @memberof Helper
+   */
+  static verifyToken(token) {
+    const payload = jwt.verify(token, secret, (err, decoded) => decoded);
+    return payload;
+  }
 }
