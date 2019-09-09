@@ -53,9 +53,11 @@ const emailExists = (req, res, next) => {
  * @param {object} next
  * @returns {object} JSON response
  */
-const loginData = (req, res, next) => {
-  const { email, password } = req.body;
-  models.Users.findOne({ where: { email } }).then(response => {
+const validateLogin = (req, res, next) => {
+  let { email } = req.body;
+  const { password } = req.body;
+  email = email.trim().toLowerCase();
+  models.User.findOne({ where: { email } }).then(response => {
     if (!response) {
       Responses.setError(404, 'Your email cannot be found in our database.');
       return Responses.send(res);
@@ -74,5 +76,5 @@ const loginData = (req, res, next) => {
 };
 
 export default {
-  validateUser, emailExists, loginData
+  validateUser, emailExists, validateLogin
 };

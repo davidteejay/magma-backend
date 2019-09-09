@@ -11,7 +11,7 @@ userRoute.post('/users/signup',
 
 userRoute.post('/users/signin',
   userValidations.validateUser('signin'),
-  userValidations.loginData,
+  userValidations.validateLogin,
   UserController.signin);
 
 export default userRoute;
