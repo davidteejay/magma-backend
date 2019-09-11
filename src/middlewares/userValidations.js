@@ -45,6 +45,36 @@ const emailExists = (req, res, next) => {
   });
 };
 
+/**
+ * @function
+ * @description Check if user email exist, password correct and verified
+ * @param {object} req - Resquest object
+ * @param {object} res - Response object
+ * @param {object} next
+ * @returns {object} JSON response
+ */
+const validateLogin = (req, res, next) => {
+  let { email } = req.body;
+  const { password } = req.body;
+  email = email.trim().toLowerCase();
+  models.User.findOne({ where: { email } }).then(response => {
+    if (!response) {
+      Responses.setError(404, 'Your email cannot be found in our database.');
+      return Responses.send(res);
+    }
+    const correctPassword = Helper.comparePassword(password, response.password);
+    if (!correctPassword) {
+      Responses.setError(401, 'Your password is incorrect.');
+      return Responses.send(res);
+    }
+    if (response.isVerified === false) {
+      Responses.setError(401, 'Your email is not verified.');
+      return Responses.send(res);
+    }
+    next();
+  });
+};
+
 export default {
-  validateUser, emailExists
+  validateUser, emailExists, validateLogin
 };
