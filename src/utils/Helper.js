@@ -217,4 +217,18 @@ export default class Helper {
     if (conflicts) return conflicts;
     return null;
   }
+
+  static constructNewRequestEmail(emailDetails) {
+    const {
+      managerEmail, fullname, destination, reason
+    } = emailDetails;
+    return {
+      from: `barefootnomad.com <${process.env.GMAIL_ADDRESS}>`,
+      to: [managerEmail],
+      subject: 'New Travel request',
+      html: `
+      <h3>hi there</h3>
+      <p>${fullname} made a new trip request to travel to <b>${destination}</b> for ${reason} reasons`
+    };
+  }
 }

@@ -1,12 +1,10 @@
 import UserService from '../services/UserService';
 import Responses from '../utils/Responses';
 import Helper from '../utils/Helper';
-<<<<<<< HEAD
 import sendEmail from '../utils/email';
-=======
-import Email from '../utils/email';
->>>>>>> feat(password-reset): add password reset endpoints
 import transporter from '../utils/transporter';
+
+
 /**
  * @class
  * @description A container class for all controllers

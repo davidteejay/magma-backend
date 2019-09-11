@@ -6,7 +6,6 @@ import app from '../index';
 import email from '../utils/email';
 
 
-
 chai.use(chaiHttp);
 chai.use(sinonChai);
 

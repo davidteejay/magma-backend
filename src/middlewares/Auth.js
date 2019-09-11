@@ -28,6 +28,7 @@ class Auth {
       req.user = decoded;
       return next();
     } catch (err) {
+      console.log(err);
       const message = await Auth.getTokenErrorMessage(err);
       Responses.setError(401, message);
       return Responses.send(res);

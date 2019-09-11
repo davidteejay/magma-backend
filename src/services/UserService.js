@@ -1,7 +1,6 @@
 import models from '../database/models';
 import Helper from '../utils/Helper';
 
-
 const { User } = models;
 
 /**
@@ -20,14 +19,14 @@ export default class UserService {
    */
   static async signup(userCredentials) {
     let {
-      firstName, lastName, email, password
+      firstName, lastName, email, password, managerEmail
     } = userCredentials;
     firstName = firstName.trim();
     lastName = lastName.trim();
     email = email.trim().toLowerCase();
     password = await Helper.hashPassword(password);
     const user = {
-      firstName, lastName, email, password
+      firstName, lastName, email, password, managerEmail
     };
     return User.create(user);
   }
@@ -68,6 +67,14 @@ export default class UserService {
       where: { email },
       returning: true,
       plain: true,
+    });
+  }
+
+  static async getUserDetails(id) {
+    return User.findOne({
+      where: {
+        id,
+      },
     });
   }
 }

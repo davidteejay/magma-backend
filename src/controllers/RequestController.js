@@ -1,6 +1,8 @@
 import RequestService from '../services/RequestService';
 import Responses from '../utils/Responses';
 import Helper from '../utils/Helper';
+import UserService from '../services/UserService';
+import Notification from '../utils/Notification';
 
 /**
  * @class
@@ -19,6 +21,7 @@ export default class RequestController {
    */
   static bookTrip(req, res) {
     const userId = req.user.id;
+
     const {
       origin, destination, departureDate, reason, accommodation, type
     } = req.body;
@@ -27,6 +30,25 @@ export default class RequestController {
     };
     request = Helper.formatRequest(request);
     RequestService.bookTrip(request).then(response => {
+      UserService.getUserDetails(userId)
+        .then(user => {
+          const managerEmail = user.get('managerEmail');
+          const userEmail = user.get('email');
+          const fullname = `${user.get('firstName')} ${user.get('lastName')}`;
+          Notification.emit('notification', {
+            type: 'newRequest',
+            payload: {
+              emailDetails: {
+                managerEmail,
+                userEmail,
+                fullname,
+                destination: request.destination,
+                reason: request.reason,
+              }
+            }
+          });
+        });
+
       Responses.setSuccess(201, 'travel request booked successfully', response);
       return Responses.send(res);
     }).catch(() => {
