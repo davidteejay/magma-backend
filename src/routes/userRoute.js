@@ -1,19 +1,21 @@
 import express from 'express';
 import UserController from '../controllers/UserController';
+import validation from '../middlewares/validation';
 import userValidations from '../middlewares/userValidations';
 
 const userRoute = express.Router();
+const { validate } = validation;
 
 userRoute.post(
   '/users/signup',
-  userValidations.validateUser('signup'),
+  validate('signup'),
   userValidations.emailExists,
   UserController.signup
 );
 
 userRoute.post(
   '/users/signin',
-  userValidations.validateUser('signin'),
+  validate('signin'),
   userValidations.validateLogin,
   UserController.signin
 );

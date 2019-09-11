@@ -41,12 +41,11 @@ class Auth {
    * @param {object} error - Request object
    * @param {object} next
    * @returns {object} JSON response
-   * @memberof Helper
+   * @memberof Auth
    */
   static getTokenErrorMessage(error) {
     const expMessage = 'your session has expired, please login again';
-    const errorMessage = error.message === 'jwt expired'
-      ? expMessage : 'Authentication failed';
+    const errorMessage = error.message === 'jwt expired' ? expMessage : 'Authentication failed';
     return errorMessage;
   }
 }
