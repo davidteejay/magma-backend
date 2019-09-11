@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import Responses from './Responses';
 
@@ -7,6 +8,35 @@ import Responses from './Responses';
  * @exports Helper
  */
 export default class Helper {
+  /**
+   * @method generateToken
+   * @description Generates token for securing endpoints
+   * @static
+   * @param {object} payload - data object
+   * @returns {object} JSON response
+   * @memberof Helper
+   */
+  static generateToken(payload) {
+    const secret = process.env.SECRET;
+    const token = jwt.sign(payload, secret, {
+      expiresIn: '1hr',
+    });
+    return token;
+  }
+
+  /**
+   * @method verifyToken
+   * @description verifies token
+   * @static
+   * @param {object} token - data object
+   * @returns {object} JSON response
+   * @memberof Auth
+   */
+  static verifyToken(token) {
+    const decoded = jwt.verify(token, process.env.SECRET);
+    return decoded;
+  }
+
   /**
    * @method hashPassword
    * @description Hash password before saving in the database

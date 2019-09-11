@@ -58,6 +58,7 @@ describe('/POST Signup route', () => {
       .end((err, res) => {
         expect(res).to.have.status(201);
         expect(res.body).to.be.an('object');
+        expect(res.body.data).to.have.property('token');
         expect(res.body).to.have.property('message')
           .eql('user account created successfully');
         done(err);
@@ -66,12 +67,29 @@ describe('/POST Signup route', () => {
 });
 
 describe('/POST Signin route', () => {
+  it('should return an error if user credentials are invalid', done => {
+    chai
+      .request(app)
+      .post('/api/v1/users/signin')
+      .send({
+        email: 'viola10gmail.com',
+        password: 'viola100'
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.have.property('status').eql('error');
+        expect(res.body).to.have.property('message');
+        done(err);
+      });
+  });
+
   it('should return an error if login email is not found', done => {
     chai
       .request(app)
       .post('/api/v1/users/signin')
       .send({
-        email: 'viola102gmail.com',
+        email: 'viola102@gmail.com',
         password: 'viola10012'
       })
       .end((err, res) => {
@@ -127,6 +145,7 @@ describe('/POST Signin route', () => {
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('object');
+        expect(res.body.data).to.have.property('token');
         expect(res.body).to.have.property('message')
           .eql('Login successful.');
         done(err);
