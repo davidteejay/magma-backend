@@ -6,5 +6,12 @@ module.exports = (sequelize, DataTypes) => {
     password: { type: DataTypes.STRING, allowNull: false },
     isVerified: { type: DataTypes.BOOLEAN, defaultValue: false }
   }, {});
+  User.associate = models => {
+    User.hasMany(models.Request, {
+      as: 'requester',
+      foreignKey: 'userId',
+      onDelete: 'CASCADE'
+    });
+  };
   return User;
 };

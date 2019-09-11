@@ -17,6 +17,9 @@ const password = Joi.string().required().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(
   .label('password is required, must be at least 8 characters and must'
     + ' contain at least a number, one lowercase and one uppercase alphabet');
 
+const required = Joi.string().trim().required();
+const str = Joi.string().allow('');
+
 export default {
   signup: Joi.object().keys({
     firstName,
@@ -27,5 +30,15 @@ export default {
   signin: Joi.object().keys({
     email,
     password: Joi.string().required().label('password is required')
+  }),
+  request: Joi.object().keys({
+    origin: required.label('origin is required'),
+    destination: required.label('destination is required'),
+    type: required.valid('one-way')
+      .label('type is required and can only be "one-way"'),
+    departureDate: Joi.date().iso().required()
+      .label('departureDate is required and must follow this format: YYYY-MM-DD'),
+    reason: str.label('reason must be a string'),
+    accommodation: str.label('accommodation must be a string')
   })
 };

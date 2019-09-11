@@ -8,6 +8,7 @@ import methodOverride from 'method-override';
 import swaggerUI from 'swagger-ui-express';
 import swaggerDoc from './config/swagger.json';
 import userRoute from './routes/userRoute';
+import requestRoute from './routes/requestRoute';
 import Responses from './utils/Responses';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -33,6 +34,7 @@ if (!isProduction) {
 app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 
 app.use('/api/v1', userRoute);
+app.use('/api/v1', requestRoute);
 
 app.get('/', (req, res) => {
   Responses.setSuccess(200, 'Welcome to Barefoot Nomad');

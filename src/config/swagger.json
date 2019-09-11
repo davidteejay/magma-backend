@@ -11,6 +11,10 @@
     {
       "name": "auth",
       "description": "Create account and login"
+    },
+    {
+      "name": "request",
+      "description": "Make travel requests"
     }
   ],
   "schemes": ["https", "http"],
@@ -93,6 +97,46 @@
           }
         }
       }
+    },
+    "/requests": {
+      "post": {
+        "tags": ["request"],
+        "summary": "Book a travel request",
+        "description": "This endpoint books a one-way trip request",
+        "operationId": "bookTrip",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "data needed to book a trip",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BookTrip"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "message created successfully",
+            "schema": {
+              "$ref": "#/definitions/RequestResponse"
+            }
+          },
+          "400": {
+            "description": "departureDate is required"
+          },
+          "409": {
+            "description": "you already have a trip booked around this period, you may choose to cancel and make a multi-city request"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -126,6 +170,31 @@
         }
       }
     },
+    "BookTrip": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "type": "string"
+        },
+        "destination": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["one-way", "return"]
+        },
+        "departureDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "accommodation": {
+          "type": "string"
+        }
+      }
+    },
     "AuthResponse": {
       "type": "object",
       "properties": {
@@ -151,6 +220,45 @@
               },
               "lastName": {
                 "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "RequestResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object",
+          "items": {
+            "properties": {
+              "origin": {
+                "type": "string"
+              },
+              "destination": {
+                "type": "string"
+              },
+              "departureDate": {
+                "type": "string",
+                "format": "date"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["one-way", "return"]
+              },
+              "reason": {
+                "type": "string"
+              },
+              "accommodation": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["open", "closed"]
               }
             }
           }
