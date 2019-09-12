@@ -187,6 +187,10 @@
           "type": "string",
           "format": "date"
         },
+        "returnDate": {
+          "type": "string",
+          "format": "date"
+        },
         "reason": {
           "type": "string"
         },
@@ -242,13 +246,17 @@
               "destination": {
                 "type": "string"
               },
+              "type": {
+                "type": "string",
+                "enum": ["one-way", "return"]
+              },
               "departureDate": {
                 "type": "string",
                 "format": "date"
               },
-              "type": {
+              "returnDate": {
                 "type": "string",
-                "enum": ["one-way", "return"]
+                "format": "date"
               },
               "reason": {
                 "type": "string"

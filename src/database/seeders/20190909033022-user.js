@@ -3,7 +3,7 @@ module.exports = {
     firstName: 'Tosin',
     lastName: 'Alabi',
     email: 'tosin@mail.com',
-    password: 'tosin1234',
+    password: '$2b$10$mnxlDiPZl.aUHVJJbe3foO7QKKcKqFuhwSwk4XbFQTAp1mdSG3TIC',
     isVerified: true,
     createdAt: new Date(),
     updatedAt: new Date()
@@ -21,7 +21,7 @@ module.exports = {
     firstName: 'Frank',
     lastName: 'Lampard',
     email: 'frank@gmail.com',
-    password: 'frank1234',
+    password: 'Frank1234',
     isVerified: false,
     createdAt: new Date(),
     updatedAt: new Date()
