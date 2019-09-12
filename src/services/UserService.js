@@ -40,7 +40,6 @@ export default class UserService {
       email: foundUser.email,
       firstName: foundUser.firstName,
       lastName: foundUser.lastName,
-      role: foundUser.role
     };
     return user;
   }

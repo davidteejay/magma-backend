@@ -154,24 +154,12 @@
     "UserProfile": {
       "type": "object",
       "properties": {
-        "firstname": {
+        "firstName": {
           "type": "string"
         },
-        "lastname": {
+        "lastName": {
           "type": "string"
         },
-        "email": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string",
-          "format": "password"
-        }
-      }
-    },
-    "AuthResponse": {
-      "type": "object",
-      "properties": {
         "phoneNumber": {
           "type": "string"
         },
@@ -211,9 +199,6 @@
           "type": "object",
           "items": {
             "properties": {
-              "token": {
-                "type": "string"
-              },
               "id": {
                 "type": "integer",
                 "format": "int64"
@@ -221,10 +206,7 @@
               "firstName": {
                 "type": "string"
               },
-              "lastname": {
-                "type": "string"
-              },
-              "email": {
+              "lastName": {
                 "type": "string"
               },
               "phoneNumber": {
