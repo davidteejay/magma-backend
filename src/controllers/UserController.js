@@ -1,6 +1,6 @@
 import UserService from '../services/UserService';
-import Responses from '../utils/Responses';
 import Helper from '../utils/Helper';
+import Responses from '../utils/Responses';
 
 /**
  * @class
@@ -54,5 +54,58 @@ export default class UserController {
       Responses.setError(500, 'database error');
       return Responses.send(res);
     });
+  }
+
+  /**
+   * @method updateUserProfile
+   * @description Implements userprofile settings endpoint
+   * @static
+   * @param {object} req - Request object
+   * @param {object} res - Response object
+   * @returns {object} JSON response
+   * @memberof UserController
+   */
+  static updateUserProfile(req, res) {
+    const { body, user, params } = req;
+    if (user.email !== params.email){
+      Responses.setError(401, 'You are not allowed to edit this profile');
+      return Responses.send(res);
+    }
+    UserService.updateUser(body, user.id, params.email)
+      .then(updateUser => {
+        console.log(updateUser)
+        delete updateUser[0].dataValues.password;
+        Responses.setSuccess(201, 'user account updated successfully', updateUser[0]);
+        return Responses.send(res);
+      }).catch(() => {
+          Responses.setError(500, 'database error');
+          return Responses.send(res);
+      });
+  }
+
+  /**
+   * @method retrieveUserProfile
+   * @description Implements userprofile settings endpoint
+   * @static
+   * @param {object} req - Request object
+   * @param {object} res - Response object
+   * @returns {object} JSON response
+   * @memberof UserController
+   */
+  static retrieveUserProfile(req, res) {
+    const {user, params} = req;
+    if (user.email !== params.email){
+      Responses.setError(401, 'You are not allowed to see this profile');
+      return Responses.send(res);
+    }
+    UserService.retrieveUser(user.id, params.email)
+      .then(retrieveUser => {
+        delete retrieveUser.dataValues.password;
+        Responses.setSuccess(200, 'user account retrieved successfully', retrieveUser);
+        return Responses.send(res);
+      }).catch(() => {
+          Responses.setError(500, 'database error');
+          return Responses.send(res);
+      });
   }
 }

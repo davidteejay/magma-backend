@@ -133,6 +133,133 @@
           }
         }
       }
+    },
+    "/user/profile/{email}": {
+      "patch": {
+        "tags": ["user profile"],
+        "summary": "Update user profile",
+        "description": "This endpoint updates a user profile",
+        "operationId": "updateProfile",
+        "produces": ["application/json"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "description": "user email",
+            "schema": {
+              "type": "string",
+              "format": "email"
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Information needed to update a user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserProfile"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "user account updated successfully",
+            "schema": {
+              "$ref": "#/definitions/UserProfileResponse"
+            }
+          },
+          "400": {
+            "description": "email is required, and should follow this format: myemail@domain.com"
+          },
+          "500": {
+            "description": "database error"
+          }
+        }
+      },
+      "get": {
+        "tags": ["user profile"],
+        "summary": "Retrieve user profile",
+        "description": "This endpoint retrieve a user profile",
+        "operationId": "retrieveProfile",
+        "produces": ["application/json"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "description": "user email",
+            "schema": {
+              "type": "string",
+              "format": "email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user account retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/UserProfileResponse"
+            }
+          },
+          "400": {
+            "description": "email is required, and should follow this format: myemail@domain.com"
+          },
+          "500": {
+            "description": "database error"
+          }
+        }
+      }
+    },
+    "/requests": {
+      "post": {
+        "tags": ["request"],
+        "summary": "Book a travel request",
+        "description": "This endpoint books a one-way trip request",
+        "operationId": "bookTrip",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "data needed to book a trip",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BookTrip"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "message created successfully",
+            "schema": {
+              "$ref": "#/definitions/RequestResponse"
+            }
+          },
+          "400": {
+            "description": "departureDate is required"
+          },
+          "409": {
+            "description": "you already have a trip booked around this period, you may choose to cancel and make a multi-city request"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -151,6 +278,50 @@
         "password": {
           "type": "string",
           "format": "password"
+        }
+      }
+    },
+    "Signin": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string",
+          "format": "password"
+        }
+      }
+    },
+    "UserProfile": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "string"
+        },
+        "preferredLanguage": {
+          "type": "string"
+        },
+        "birthDate": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "department": {
+          "type": "string"
+        },
+        "lineManager": {
+          "type": "string"
         }
       }
     },
@@ -175,6 +346,31 @@
           "format": "date"
         },
         "returnDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "accommodation": {
+          "type": "string"
+        }
+      }
+    },
+    "BookTrip": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "type": "string"
+        },
+        "destination": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["one-way", "return"]
+        },
+        "departureDate": {
           "type": "string",
           "format": "date"
         },

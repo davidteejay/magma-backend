@@ -2,6 +2,8 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import Responses from './Responses';
 
+const secret = process.env.SECRET;
+
 /**
  * @class Helper
  * @description An helper class containing utility methods
@@ -17,9 +19,8 @@ export default class Helper {
    * @memberof Helper
    */
   static generateToken(payload) {
-    const secret = process.env.SECRET;
     const token = jwt.sign(payload, secret, {
-      expiresIn: '1hr',
+      expiresIn: '24hr',
     });
     return token;
   }
@@ -33,7 +34,7 @@ export default class Helper {
    * @memberof Auth
    */
   static verifyToken(token) {
-    const decoded = jwt.verify(token, process.env.SECRET);
+    const decoded = jwt.verify(token, secret);
     return decoded;
   }
 
