@@ -18,21 +18,28 @@ export default class UserController {
    * @memberof UserController
    */
   static async signup(req, res) {
-    const { body } = req;
-    try {
-      const newUser = await UserService.signup(body);
+    const user = req.body;
+    UserService.signup(user).then(response => {
       const result = {
-        id: newUser.id,
-        email: newUser.email
+        id: response.id,
+        email: response.email,
+        firstName: response.firstName,
+        lastName: response.lastName
       };
-      const token = Helper.generateToken(result);
+      const payload = {
+        id: response.id,
+        email: response.email,
+        role: response.role,
+        managerId: response.managerId
+      };
+      const token = Helper.generateToken(payload);
       Responses.setSuccess(201, { token, ...result }, 'user account created successfully');
       return Responses.send(res);
-    } catch (error) {
+    }).catch((error) => {
+      console.log(error);
       Responses.setError(500, 'database error');
-      return Responses.send(res);
-    }
-  }
+  })
+}
   /**
    * @method updateUserProfile
    * @description Implements userprofile settings endpoint
@@ -102,6 +109,7 @@ export default class UserController {
       Responses.setSuccess(201, assign);
       return Responses.send(res);
     } catch (error) {
+      console.log(error);
       Responses.setError(500, 'database error');
       return Responses.send(res);
     }
@@ -116,14 +124,21 @@ export default class UserController {
    * @returns {object} JSON response
    * @memberof UserController
    */
-  static signin(req, res) {
+
+  static async signin(req, res) {
     const loginCredentials = req.body;
     UserService.signin(loginCredentials).then(response => {
-      Responses.setSuccess(200, 'Login successful.', response);
+      const payload = {
+        id: response.id,
+        email: response.email,
+        role: response.role,
+        managerId: response.managerId
+      };
+      const token = Helper.generateToken(payload);
+      Responses.setSuccess(200, { token, ...response }, 'Login successful.');
       return Responses.send(res);
     }).catch(() => {
       Responses.setError(500, 'database error');
-      return Responses.send(res);
     });
-  }
+}
 }

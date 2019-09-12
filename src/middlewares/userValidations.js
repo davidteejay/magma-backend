@@ -3,7 +3,6 @@ import _ from 'lodash';
 import Schemas from '../utils/userSchema';
 import models from '../database/models';
 import Helper from '../utils/Helper';
-import roleSchema from '../utils/roleSchema';
 import Responses from '../utils/Responses';
 
 /**
@@ -23,6 +22,7 @@ const validateUser = path => (req, res, next) => {
       const errors = [];
       response.error.details.forEach(error => {
         errors.push(error.context.label);
+        console.log(error);
       });
       Responses.setError(400, errors);
       return Responses.send(res);
@@ -69,26 +69,6 @@ const emailExists = async (req, res, next) => {
   next();
 };
 
-const validateRole = path => (req, res, next) => {
-  console.log(req.params)
-  const assignRole = req.body;
-  if (_.has(roleSchema, path)) {
-    const schema = _.get(roleSchema, path, 0);
-    const response = Joi.validate(assignRole, schema, { abortEarly: false });
-    if (!response.error) {
-      req.body = assignRole;
-    } else {
-      const errors = [];
-      response.error.details.forEach(error => {
-        errors.push(error.context.label);
-      });
-      Responses.setError(400, errors);
-      return Responses.send(res);
-    }
-  }
-  next();
-};
-
 /**
  * @function
  * @description Check if user email exist, password correct and verified
@@ -120,5 +100,5 @@ const validateLogin = (req, res, next) => {
 };
 
 export default {
-  validateUser, validateEmail, emailExists, validateRole
+  validateUser, validateEmail, emailExists, validateLogin
 };

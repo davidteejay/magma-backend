@@ -1,4 +1,4 @@
-import { Role } from '../database/models/role';
+import jwt from 'jsonwebtoken';
 
 /**
  * @param  {string} role permitted role
@@ -6,14 +6,25 @@ import { Role } from '../database/models/role';
  */
 
 const permitUser = role => async (req, res, next) => {
-const value = await Role.findOne({ where: {id: req.decoded.roleId} });
-const ispermitted = role.map(userRole => value.dataValues.type === userRole).find(isRole => isRole === true);
+try {
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = await jwt.verify(token, process.env.SECRET);
+    const isPermitted = decoded.role;
 
-if(!isPermitted) {
-    res.status(403).json({'error' : 'You are not permitted to access this route'});
-}
-
-next();
+    if (isPermitted !== role) {
+        console.log(role);
+        console.log(isPermitted);
+      return res.status(403).send({
+        error: 'You are not permitted to access this route',
+      });
+    }
+    return next();
+  } catch (error) {
+      console.log(error)
+    return res.status(401).send({
+      error: 'Invalid or No token provided',
+    });
+  }
 
 };
 

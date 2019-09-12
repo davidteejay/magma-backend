@@ -1,7 +1,7 @@
 import models from '../database/models';
 import Helper from '../utils/Helper';
 
-const { User, Role } = models;
+const { User } = models;
 
 /**
  * @class
@@ -20,7 +20,7 @@ export default class UserService {
   static async signup(userCredentials) {
     const { password } = userCredentials;
     userCredentials.password = await Helper.hashPassword(password);
-    return Users.create(userCredentials);
+    return User.create(userCredentials);
   }
 
   
@@ -39,7 +39,8 @@ export default class UserService {
       id: foundUser.id,
       email: foundUser.email,
       firstName: foundUser.firstName,
-      lastName: foundUser.lastName
+      lastName: foundUser.lastName,
+      role: foundUser.role
     };
     return user;
   }
@@ -80,27 +81,20 @@ export default class UserService {
    * @memberof UserService
    */
   static async assignUser(body) {
-    const { email, roleId } = body;
-    const checkRole = await Role.findOne({ where: { id: Number(roleId) } });
+    const { email, role } = body;
     const getUser = await User.findOne({
       where: {
         email
-      },
-      include: [{
-        model: Role,
-        attributes: ['type']
-      }]
+      }
     });
 
     if (!getUser) throw new Error('User not found');
 
-    if (!checkRole) throw new Error('Role does not exist');
+    if (getUser.dataValues.isVerified === false) throw new Error('User email is not verified');
 
-    if (getUser.dataValues.Role.dataValues.type === 'guest') throw new Error('User email is not verified');
+    if (getUser.dataValues.role === role) throw new Error('User is already assigned this role');
 
-    if (getUser.dataValues.roleId === Number(roleId)) throw new Error('User is already assigned this role');
-
-    await User.update({ roleId: Number(roleId) }, { where: { email } });
+    await User.update({ role: role }, { where: { email } });
 
     return 'User Role Assigned Successfully';
   }

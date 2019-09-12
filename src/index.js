@@ -8,11 +8,7 @@ import methodOverride from 'method-override';
 import swaggerUI from 'swagger-ui-express';
 import swaggerDoc from './config/swagger.json';
 import userRoute from './routes/userRoute';
-<<<<<<< HEAD
 import Responses from './utils/Responses';
-=======
-import route from './routes/index';
->>>>>>> feat(signup-api): implement user signup endpoint
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -36,7 +32,6 @@ if (!isProduction) {
 
 app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 
-<<<<<<< HEAD
 app.use('/api/v1', userRoute);
 
 app.get('/', (req, res) => {
@@ -47,15 +42,6 @@ app.get('/', (req, res) => {
 app.all('/*', (req, res) => {
   Responses.setError(404, 'The requested url was not found on this server');
   Responses.send(res);
-=======
-app.use('/api/v1', route);
-app.use('/api/v1', userRoute);
-
-app.get('/', (req, res) => {
-  res.status(200).send({
-    message: 'Welcome to Barefoot Nomad',
-  });
->>>>>>> feat(signup-api): implement user signup endpoint
 });
 
 // catch 404 and forward to error handler
@@ -99,6 +85,7 @@ app.use((err, req, res) => {
 // finally, let's start our server...
 const server = app.listen(process.env.PORT || 3000, () => {
   debug(`Listening on port ${server.address().port}`);
+  console.log("App is running");
 });
 
 export default server;

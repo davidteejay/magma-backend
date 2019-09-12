@@ -11,7 +11,7 @@ userRoute.post('/user/signup',
   userValidations.emailExists,
   UserController.signup);
 
-userRoute.post('/users/signin',
+userRoute.post('/user/signin',
   userValidations.validateUser('signin'),
   userValidations.validateLogin,
   UserController.signin);
@@ -28,8 +28,8 @@ userRoute.patch('/user/profile/:email',
 
 userRoute.patch('/user/assignRole',
   Auth.userAuth,
-  permitUser(['superAdmin']),
-  userValidations.validateRole('assignRole'),
+  permitUser('superAdmin'),
+  userValidations.validateUser('assignRole'),
   UserController.assignRole);
 
 export default userRoute;

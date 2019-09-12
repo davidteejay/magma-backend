@@ -27,5 +27,9 @@ export default {
   signin: Joi.object().keys({
     email: Joi.string().required().label('Email is required'),
     password: Joi.string().required().label('password is required')
+  }),
+  assignRole: Joi.object().keys({
+    email: Joi.string().required().label('Email is required'),
+    role: Joi.string().required().label('role is required'),
   })
 };

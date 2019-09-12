@@ -1,12 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    firstname: {
-      type: DataTypes.STRING,
-      allowNull: false
+    firstName: {
+    type:  DataTypes.STRING,
+    allowNull: false
     },
-    lastname: {
-      type: DataTypes.STRING,
-      allowNull: false,
+    lastName: { 
+     type: DataTypes.STRING,
+      allowNull: false
     },
     email: {
       type: DataTypes.STRING,
@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
     },
     gender: {
       type: DataTypes.ENUM('Male', 'Female', 'Other'),
@@ -38,30 +42,22 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     role: {
-      type: DataTypes.STRING,
-      allowNull: true
+      type: DataTypes.ENUM('superAdmin', 'travelAdmin', 'travelTeamMember', 'manager', 'requester'),
+      allowNull: true,
+      defaultValue: "requester"
     },
     department: {
       type: DataTypes.STRING,
       allowNull: true
     },
-    lineManager: {
-      type: DataTypes.STRING,
+    managerId: {
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     phoneNumber: {
       type: DataTypes.STRING,
       allowNull: true
     },
-    roleId: {
-      type: DataTypes.INTEGER,
-    }
-  }, 
-);
-User.associate = (models) => {
-  User.belongsTo(models.Role, {
-    foreignKey: 'roleId'
-  });
-};
+  }, {});
   return User;
 };
