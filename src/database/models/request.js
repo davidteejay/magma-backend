@@ -8,6 +8,7 @@ export default (sequelize, DataTypes) => {
     reason: { type: DataTypes.STRING },
     accommodation: { type: DataTypes.STRING },
     status: { type: DataTypes.STRING, defaultValue: 'open' }
+    status: { type: DataTypes.INTEGER, allowNull: false },
   }, {});
   Request.associate = models => {
     Request.belongsTo(models.User, {
