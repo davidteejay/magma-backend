@@ -34,4 +34,24 @@ export default class RequestController {
       return Responses.send(res);
     });
   }
+
+  /**
+   * @method
+   * @description Implements cancel request endpoint
+   * @static
+   * @param {object} req - Request object
+   * @param {object} res - Response object
+   * @returns {object} JSON response
+   * @memberof RequestController
+   */
+  static async cancelTrip(id, res) {
+      try {
+        const deleted = await RequestService.deleteTrip(id);
+        Responses.setSuccess(201, deleted);
+        return Responses.send(res);
+      } catch (error) {
+        Responses.setError(500, 'database error');
+        return Responses.send(res);
+      }
+  }
 }

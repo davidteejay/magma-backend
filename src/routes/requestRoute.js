@@ -6,7 +6,7 @@ import Auth from '../middlewares/Auth';
 
 const { userAuth } = Auth;
 const { validateTrip, validateTripRequest } = requestValidations;
-const { bookTrip } = RequestController;
+const { bookTrip, cancelTrip } = RequestController;
 
 const requestRoute = express.Router();
 
@@ -17,6 +17,11 @@ requestRoute.post(
   validateTrip,
   validateTripRequest,
   bookTrip
+);
+requestRoute.delete(
+  '/requests/:requestId',
+  userAuth,
+  cancelTrip
 );
 
 export default requestRoute;
